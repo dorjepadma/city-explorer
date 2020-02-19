@@ -15,7 +15,7 @@ let lng;
 app.get('/location', async(req, res, next) => {
     try { const location = req.query.search;
 
-    const URL = `https://us1.locationiq.com/vq/search.php?key={process.env.GEOCODE_API_KEY}&q=${location}&format=json`;    
+    const URL = `https://us1.locationiq.com/vq/search.php?key=${process.env.GEOCODE_API_KEY}&q=${location}&format=json`;    
     const cityData = await request.get(URL);
 
     const firstResult = cityData.body[0];
@@ -32,8 +32,12 @@ app.get('/location', async(req, res, next) => {
     next(err);
 }
 });
-const getWeatherData = (lat, lng) => {
-    return weather.daily.data.map(forecast => {
+const getWeatherData = async (lat, lng) => {
+    const weather = request.get('
+        https://api.darksky'...),
+    
+    
+    return weather.body.daily.data.map(forecast => {
         return {
         forecast: forecast.summary,
         time: new Date(forecast.time * 1000),
