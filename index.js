@@ -1,7 +1,7 @@
-import { app } from 'server.js';
-const PORT = process.env.PORT;
+const { app } = require('./app.js');
+const port = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-    console.log('server running on PORT', PORT);
+app.listen(port, () => {
+    console.log(`server running on PORT ${port}`);
 
 });

@@ -9,12 +9,13 @@
   "scripts": {
     "lint": "eslint .",
     "test": "jest --detectOpenHandles",
-    "start": "node server.js",
-    "start:watch": "nodemon server.js"
+    "start": "node index.js",
+    "start:watch": "nodemon index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "jest": "^25.1.0",
     "nodemon": "^2.0.2",
