@@ -10,8 +10,8 @@ app.get('/', (req, res) => res.send('Jello World!'));
 
 let lat;
 let lng;
-app.get('/location', (req, res) => {
-    const location = req.query.search;
+app.get('/location', (req, res, next) => {
+    try { const location = req.query.search;
 
     const cityData = data.results[0];
 
@@ -23,6 +23,9 @@ app.get('/location', (req, res) => {
         latitude: cityData.geometry.location.lat,
         longitude: cityData.geometry.location.lng,
     });
+} catch(err) {
+    next(err);
+}
 });
 const getWeatherData = (lat, lng) => {
     return weather.daily.data.map(forecast => {
