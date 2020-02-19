@@ -1,6 +1,7 @@
+require('dotenv').config();
 const express = require('express');
-// const req = require('superagent');
-const data = require('./data/geo.js');
+const request = require('superagent');
+// const data = require('./data/geo.js');
 const weather = require('./data/darksky.js');
 const cors = require('cors');
 const app = express();
@@ -10,12 +11,16 @@ app.get('/', (req, res) => res.send('Jello World!'));
 
 let lat;
 let lng;
-app.get('/location', (req, res, next) => {
+
+app.get('/location', async(req, res, next) => {
     try { const location = req.query.search;
 
-    const cityData = data.results[0];
+    const URL = `https://us1.locationiq.com/vq/search.php?key={process.env.GEOCODE_API_KEY}&q=${location}&format=json`;    
+    const cityData = await request.get(URL);
 
-    lat = cityData.geometry.location.lat;
+    const firstResult = cityData.body[0];
+
+    lat = firstResult.lat;
     lng = cityData.geometry.location.lng;
 
     res.json({
