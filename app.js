@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const request = require('superagent');
 // const data = require('./data/geo.js');
-const weather = require('./data/darksky.js');
+// const weather = require('./darksky.js');
 const cors = require('cors');
 const app = express();
 
@@ -15,18 +15,19 @@ let lng;
 app.get('/location', async(req, res, next) => {
     try { const location = req.query.search;
 
-    const URL = `https://us1.locationiq.com/vq/search.php?key=${process.env.GEOCODE_API_KEY}&q=${location}&format=json`;    
+    const URL = `https://us1.locationiq.com/v1/search.php?key=${process.env.GEOCODE_API_KEY}&q=${location}&format=json`;    
+    
     const cityData = await request.get(URL);
 
     const firstResult = cityData.body[0];
 
     lat = firstResult.lat;
-    lng = cityData.geometry.location.lng;
+    lng = firstResult.lng;
 
     res.json({
         formatted_query: cityData.formatted_address,
-        latitude: cityData.geometry.location.lat,
-        longitude: cityData.geometry.location.lng,
+        latitude: lat,
+        longitude: lng,
     });
 } catch(err) {
     next(err);
