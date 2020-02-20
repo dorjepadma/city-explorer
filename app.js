@@ -41,7 +41,6 @@ const getWeatherData = async (lat, lng) => {
         };
     });
 } ;
-// console.log(forecast);
         app.get('/weather', async(req, res, next) => {
 try {
     const portlandWeather = await getWeatherData(lat, lng);
@@ -50,9 +49,51 @@ try {
     next(err)
 }
 });
+
+app.get('/yelp', async(req, res, next) => {
+try {
+    const yelp = await request.get(`https://api.yelp.com/v3/businesses/search?latitude=${lat}&longitude=${lng}`)
+    .set('Authorization', `Bearer ${process.env.YELP_API_KEY}`);
+    const yelpStuff = yelp.body.businesses.map(business => {
+        return {
+            rating: business.rating,
+            price: business.price,
+            alias: business.alias
+        }
+    })
+    res.json(yelpStuff);
+} catch (err) {
+    next(err);
+}
+});
+const getTrailData = async(lat, lng) => {
+const trailData = await request.get(`https://www.hikingproject.com/data/get-trails?lat=${lat}lon=${lng}&maxDistance=10&key=${proces.env.TRAIL_API_KEY}`);
+
+return trailData.body.trails.map( trail => {
+    return {
+        name: trail.name,
+        location: trail.location,
+        length: trail.length,
+        stars: trail.stars,
+        url: trail.url,
+        conditions: trail.conditionStatus,
+        condition_date: trail.conditionDate
+    };
+});
+};
+    
+   app.get('/trails', async(req, res, next) => {
+   try {
+       const trailList = await getTrailData(lat, lng)
+
+       res.json(trailList);      
+    } catch (err) {
+        next(err);
+    }
+    })
 app.get('*', (req, res) => res.send('404!!!'))
 module.exports = {
     app: app,
 
 };
-//need to remove app.listen when the tests are running 
+
