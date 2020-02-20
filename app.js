@@ -33,8 +33,8 @@ app.get('/location', async(req, res, next) => {
 }
 });
 const getWeatherData = async (lat, lng) => {
-    const weather = request.get('
-        https://api.darksky'...),
+    const weather = await request.get(`
+    https://api.darksky.net/forecast/${WEATHER_KEY}/${lat},${long}`);
     
     
     return weather.body.daily.data.map(forecast => {
@@ -42,10 +42,10 @@ const getWeatherData = async (lat, lng) => {
         forecast: forecast.summary,
         time: new Date(forecast.time * 1000),
     };
-    })
+    });
 };
         
-        app.get('/weather', (req, res) => {
+        app.get('/weather', (req, res, next) => {
     const portlandWeather = getWeatherData(lat, lng);
             res.json(portlandWeather);
 });
